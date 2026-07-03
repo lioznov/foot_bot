@@ -1,0 +1,23 @@
+# Виртуальное окружение
+.venv/
+venv/
+
+# Секреты (токен бота!)
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# PyCharm
+.idea/
+*.iml
+
+# База данных
+*.db
+*.sqlite
+
+# Excel отчёты
+*.xlsx
+*.xls
