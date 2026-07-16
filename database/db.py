@@ -1,53 +1,36 @@
 import sqlite3
-import os
-
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cafeteria.db")
 
 async def init_db():
-    """Инициализация базы данных и создание таблицы меню"""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect("database/cafeteria.db")
     cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS menu (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            price REAL NOT NULL
-        )
-    ''')
-    # Добавим стартовое меню, если таблица пустая
-    cursor.execute("SELECT COUNT(*) FROM menu")
-    if cursor.fetchone()[0] == 0:
-        start_menu = [
-            ("Борщ домашний", 150.0),
-            ("Пюре картофельное", 80.0),
-            ("Котлета куриная", 110.0),
-            ("Компот из сухофруктов", 40.0)
-        ]
-        cursor.executemany("INSERT INTO menu (name, price) VALUES (?, ?)", start_menu)
-        conn.commit()
-    conn.close()
 
-async def get_menu():
-    """Получение всех блюд из меню"""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT name, price FROM menu")
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
+    cursor.execute("""
+            CREATE TABLE IF NOT EXISTS menu (
+                id INTEGER PRIMERY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                price REAL NOT NULL
+            )
+    """)
 
-async def add_dish(name: str, price: float):
-    """Добавление нового блюда"""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO menu (name, price) VALUES (?, ?)", (name, price))
+    cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                telegram_id INTEGER PRIMARY KEY,
+                room TEXT NOT NULL
+            )
+    """)
     conn.commit()
     conn.close()
-
-async def clear_menu():
-    """Полная очистка меню"""
-    conn = sqlite3.connect(DB_PATH)
+async def get_user_room(telegram_id: int):
+    conn = sqlite3.connect("database/cafeteria.db")
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM menu")
+    cursor.execute("SELECT room FROM users WHERE telegram_id = ?",(telegram_id))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
+
+async def register_user(telegram_id: int, room: str):
+    conn = sqlite3.connect("database/cafeteria.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT OR REPLACE INTO users (telegram_id, room) VALUES (?, ?)",(telegram_id,room))
     conn.commit()
     conn.close()
