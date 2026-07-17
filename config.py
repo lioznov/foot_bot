@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv
+from keyboards.admin_keyboards import get_order_management_keyboard
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = os.getenv("ADMIN_ID")
 
 if not BOT_TOKEN:
     raise ValueError("ОШИБКА: Переменная не была найдена!")

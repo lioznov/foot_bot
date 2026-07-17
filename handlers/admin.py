@@ -8,7 +8,6 @@ router = Router()
 
 
 def is_admin(user_id: int) -> bool:
-    """Проверка, является ли пользователь администратором"""
     return str(user_id) == str(ADMIN_ID)
 
 
