@@ -3,8 +3,6 @@ import logging
 import os
 import sys
 
-# Настройка прокси для обхода блокировок Telegram на Windows
-# (Укажи порт своего VPN-клиента, если 2081 не подходит)
 os.environ["HTTP_PROXY"] = "http://127.0.0.1:2081"
 os.environ["HTTPS_PROXY"] = "http://127.0.0.1:2081"
 
@@ -16,7 +14,6 @@ from config import BOT_TOKEN
 from database.db import init_db
 from aiogram import Bot, Dispatcher
 
-# Импорт роутеров из хендлеров
 from handlers.start import router as start_router
 from handlers.admin import router as admin_router
 
@@ -35,7 +32,6 @@ async def on_startup():
 async def main():
     dp.startup.register(on_startup)
 
-    # Подключение роутеров
     dp.include_router(start_router)
     dp.include_router(admin_router)
 

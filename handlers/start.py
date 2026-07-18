@@ -181,7 +181,7 @@ async def confirm_order(callback: CallbackQuery, bot):
                 chat_id=int(ADMIN_ID),
                 text=admin_text,
                 reply_markup=admin_markup,
-                parse_mode="Markdown"
+                parse_mode="HTML"
             )
         except Exception as e:
             print(f"Не удалось отправить уведомление админу: {e}")
